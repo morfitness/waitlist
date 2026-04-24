@@ -1,7 +1,7 @@
 {
-  "name": "morpit-waitlist",
+  "name": "morfit-waitlist",
   "version": "1.0.0",
-  "description": "Morpit - AI-powered nutrition and fitness transformation platform waitlist",
+  "description": "Morfit - Personalized nutrition and fitness transformation platform waitlist",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -30,13 +30,13 @@
     "eslint-config-next": "14.2.5"
   },
   "keywords": [
-    "morpit",
+    "morfit",
     "nutrition",
     "fitness",
     "ai",
     "transformation",
     "waitlist"
   ],
-  "author": "Morpit Team",
+  "author": "Morfit Team",
   "license": "MIT"
 }

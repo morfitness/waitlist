@@ -7,10 +7,12 @@ import { clsx } from 'clsx'
 import { joinWaitlist } from './actions/waitlist'
 
 // Feature Card Component with scroll detection
-const FeatureCard = ({ index,  image, singleImage = true, setActiveFeature }: {
+const FeatureCard = ({ index,  image, singleImage = true, title, description, setActiveFeature }: {
   index: number
   image: string | string[]
-  singleImage?: boolean
+  singleImage?: boolean,
+  title?: string,
+  description?: string,
   setActiveFeature: (index: number) => void
 }) => {
   const ref = useRef(null)
@@ -29,23 +31,26 @@ const FeatureCard = ({ index,  image, singleImage = true, setActiveFeature }: {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: false, amount: 0.5 }}
       transition={{ duration: 0.5 }}
-      className="relative bg-white rounded-2xl h-[360px] md:h-[600px] flex items-center justify-center shadow-sm p-4"
+      className="relative rounded-2xl h-[360px] md:h-[600px] flex items-center justify-center md:shadow-sm p-4"
       style={{ zIndex: 10 + index }}
     >
-      <div className="text-center w-full h-full flex items-center justify-center">
+      <div className="text-center w-full h-full flex flex-col items-center justify-center md:flex-row">
+        <h3 className="text-2xl leading-tight font-regular text-[#101010] md:hidden">{title}</h3>
+        <p className="text-[#5C5C5C] text-sm leading-relaxed md:hidden mb-4">{description}</p>
+        
         {singleImage ? (
           <img
             src={`/images/${image}.svg`}
             alt={`feature${index}`}
-            className="mx-auto w-full h-full object-contain"
+            className="w-[98%] md:w-[96%] h-full object-contain"
           />) : (
-          <div className="flex gap-6 justify-center items-center w-full h-full">
+          <div className="flex justify-center items-center w-full h-full">
             {Array.isArray(image) && image.map((img, idx) => (
               <img
                 key={idx}
                 src={`/images/${img}.png`}
                 alt={`feature${index}-${idx}`}
-                className="w-[48%] h-full object-contain"
+                className="w-[70%] md:w-[48%] h-full object-contain"
               />
             ))}
           </div>
@@ -240,7 +245,7 @@ const WaitlistLanding = () => {
         <AnimatePresence>
           <motion.nav 
             className={clsx(
-              "fixed top-0 left-0 right-0 z-50",
+              "fixed top-0 left-0 right-0 z-[100]",
               "transition-transform duration-300 ease-in-out"
             )}
             style={{
@@ -251,8 +256,8 @@ const WaitlistLanding = () => {
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
           >
-            <div className="container mx-auto px-6 py-4">
-              <div className="flex items-center justify-between">
+            <div className="container mx-auto px-4 md:px-6 pb-3  md:py-4 md:bg-black/0">
+              <div className="flex items-center justify-between ">
                 <motion.div 
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
@@ -260,7 +265,7 @@ const WaitlistLanding = () => {
                 >
                   <img 
                     src='/images/Logo2.svg'
-                    className=''
+                    className='scale-75 md:scale-100'
                   />
                 </motion.div>
                 
@@ -269,14 +274,14 @@ const WaitlistLanding = () => {
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   onClick={() => setIsModalOpen(true)}
-                  className="hidden md:flex cursor-pointer transform items-center space-x-2 text-black bg-white py-3 px-6 rounded-full hover:bg-black hover:text-white"
+                  className="flex cursor-pointer transform items-center space-x-2 text-black bg-white py-2 md:py-3 px-3  md:px-6 shadow-lg rounded-full hover:bg-black hover:text-white"
                 >
-                    <span className="rounded-lg transition">Join Waitlist</span>
+                    <span className="rounded-lg text-sm md:text-base font-medium  transition">Join Waitlist</span>
                     <LucideMoveRight size={14}/>
                 </motion.div>
 
                 {/* Mobile Menu Button */}
-                <motion.button
+                {/* <motion.button
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -287,18 +292,18 @@ const WaitlistLanding = () => {
                   ) : (
                     <Menu className="w-6 h-6 text-white" />
                   )}
-                </motion.button>
+                </motion.button> */}
               </div>
 
               {/* Mobile Menu */}
-              <AnimatePresence>
+              {/* <AnimatePresence>
                 {isMobileMenuOpen && (
                   <motion.div
                     initial={{ opacity: 0, y: -20, height: 0 }}
                     animate={{ opacity: 1, y: 0, height: 'auto' }}
                     exit={{ opacity: 0, y: -20, height: 0 }}
                     transition={{ duration: 0.3 }}
-                    className="md:hidden mt-4 pt-4 border-t border-dark-700"
+                    className="md:hidden mt-4 pt-4 border-t border-dark-700 "
                   >
                     <div className="flex flex-col space-y-4">
                       <a 
@@ -324,7 +329,7 @@ const WaitlistLanding = () => {
                     </div>
                   </motion.div>
                 )}
-              </AnimatePresence>
+              </AnimatePresence> */}
             </div>
           </motion.nav>
         </AnimatePresence>
@@ -364,7 +369,7 @@ const WaitlistLanding = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
                 >
-                  An AI-Powered Meal Planner And Instant Food Analysis—Built For Weight Loss, Weight Gain, And Everything In Between.
+                  A smarter way to plan meals and reach your fitness goals
                 </motion.p>
                 {/* <motion.a
                   href="#waitlist"
@@ -378,113 +383,112 @@ const WaitlistLanding = () => {
             </div>
           </div>
         </section>
-
         {/* Parallax Sticky Notes Section - Card 3 */}
-        <div className='min-h-screen sticky z-20'>
-          <div className='w-full h-full bg-[#FFF7EF] text-[#101010] md:rounded-b-none rounded-none md:rounded-3xl shadow-2xl overflow-y-auto py-16'>
-          <div className='text-center max-w-2xl mx-auto'>
-            <h3 className='font-normal text-4xl md:text-[72px] capitalize leading-tight md:leading-[69px] px-4 md:px-0'>Eating right shouldn’t feel this hard.</h3>
-              <p className='max-w-3xl text-[#5C5C5C] mt-3 font-medium text-base md:text-lg leading-relaxed md:leading-[32px] px-4 md:px-0'>AI-powered meal plans and instant food analysis—built for weight loss, weight gain, and everything in between.</p>
-          </div>
-          <section>
-            {/* Sticky container - stays in viewport while scrolling through section */}
-            <div className="sticky top-0 h-screen flex items-center justify-center overflow-hidden">
-              <div className="relative w-full mx-auto px-6 max-w-screen-xl">
-                {/* Single row of overlapping sticky notes */}
-                <div className="relative flex justify-center items-end h-[500px] scale-[0.45] sm:scale-75 md:scale-100 origin-center">
-                  
-                  {/* Note 1 - Tilted right at top (top-right corner touches Note 2) */}
-                  <motion.div
-                    className="absolute scale-75 duration-500 left-[8%] hover:scale-105 transition-transform hover:z-50 group"
-                  >
-                    <div className="relative rotate-[18deg] group-hover:rotate-0 transition-transform duration-300">
-                      {/* Paper Clip Pin */}
-                      <div className="absolute -top-8 left-8 transform -rotate-[30deg] -translate-x-1/2 z-30">
-                        <svg width="50" height="60" viewBox="0 0 40 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M15 10 Q10 10 10 15 L10 35 Q10 42 17 42 Q24 42 24 35 L24 20 Q24 16 20 16 Q16 16 16 20 L16 32" 
-                                stroke="#6B7280" strokeWidth="3" strokeLinecap="round" fill="none"/>
-                        </svg>
+        <div className='min-h-screen sticky z-20 px-2 md:px-6 '>
+          <div className='w-full h-full bg-[#FFF7EF] text-[#101010] rounded-3xl shadow-2xl overflow-y-auto py-10 md:py-16'>
+            <div className='text-center max-w-2xl mx-auto'>
+              <h3 className='font-normal text-4xl md:text-[72px] capitalize leading-tight md:leading-[69px] px-4 md:px-0'>Eating right shouldn't be a struggle</h3>
+                <p className='max-w-3xl text-[#5C5C5C] mt-3 font-medium text-base md:text-lg leading-relaxed md:leading-[32px] px-4 md:px-0'>Finally a meal planner that actually understands you and your goals</p>
+            </div>
+            <section className=''>
+              {/* Sticky container - stays in viewport while scrolling through section */}
+              <div className="sticky top-0 md:h-screen flex items-center justify-center md:overflow-hidden">
+                <div className="relative w-full mx-auto px-6 max-w-screen-xl">
+                  {/* Single row of overlapping sticky notes */}
+                  <div className="relative flex justify-center items-end h-[500px] scale-100 sm:scale-75 md:scale-100 origin-center">
+                    
+                    {/* Note 1 - Tilted right at top (top-right corner touches Note 2) */}
+                    <motion.div
+                      className="absolute scale-75 duration-500 left-[8%] hover:scale-90 md:hover:scale-105 transition-transform hover:z-50 group"
+                    >
+                      <div className="relative rotate-[18deg] group-hover:rotate-0 transition-transform duration-300">
+                        {/* Paper Clip Pin */}
+                        <div className="absolute -top-8 left-8 transform -rotate-[30deg] -translate-x-1/2 z-30">
+                          <svg width="50" height="60" viewBox="0 0 40 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M15 10 Q10 10 10 15 L10 35 Q10 42 17 42 Q24 42 24 35 L24 20 Q24 16 20 16 Q16 16 16 20 L16 32" 
+                                  stroke="#6B7280" strokeWidth="3" strokeLinecap="round" fill="none"/>
+                          </svg>
+                        </div>
+                        {/* Sticky Note Image */}
+                        <img 
+                          src="/images/sticky4.svg" 
+                          alt="Generic Diet Plans Don't Work For You" 
+                          className="w-80 h-auto rounded-sm shadow-2xl"
+                        />
                       </div>
-                      {/* Sticky Note Image */}
-                      <img 
-                        src="/images/sticky4.svg" 
-                        alt="Generic Diet Plans Don't Work For You" 
-                        className="w-80 h-auto rounded-sm shadow-2xl"
-                      />
-                    </div>
-                  </motion.div>
+                    </motion.div>
 
-                  {/* Note 2 - Tilted left at top (top-left corner touches Note 1, top-right touches Note 3) */}
-                  <motion.div
-                    className="absolute left-[30%] scale-75 duration-500 hover:scale-105 transition-transform hover:z-50 group"
-                  >
-                    <div className="relative -rotate-[12deg] group-hover:rotate-0 transition-transform duration-300">
-                      {/* Paper Clip Pin */}
-                      <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 z-30">
-                        <svg width="40" height="50" viewBox="0 0 40 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M15 10 Q10 10 10 15 L10 35 Q10 42 17 42 Q24 42 24 35 L24 20 Q24 16 20 16 Q16 16 16 20 L16 32" 
-                                stroke="#6B7280" strokeWidth="3" strokeLinecap="round" fill="none"/>
-                        </svg>
+                    {/* Note 2 - Tilted left at top (top-left corner touches Note 1, top-right touches Note 3) */}
+                    <motion.div
+                      className="absolute left-[30%] scale-75 duration-500 hover:scale-105 transition-transform hover:z-50 group"
+                    >
+                      <div className="relative -rotate-[12deg] group-hover:rotate-0 transition-transform duration-300">
+                        {/* Paper Clip Pin */}
+                        <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 z-30">
+                          <svg width="40" height="50" viewBox="0 0 40 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M15 10 Q10 10 10 15 L10 35 Q10 42 17 42 Q24 42 24 35 L24 20 Q24 16 20 16 Q16 16 16 20 L16 32" 
+                                  stroke="#6B7280" strokeWidth="3" strokeLinecap="round" fill="none"/>
+                          </svg>
+                        </div>
+                        {/* Sticky Note Image */}
+                        <img 
+                          src="/images/sticky1.svg" 
+                          alt="Tracking Meals Is Time Consuming" 
+                          className="w-80 h-auto rounded-sm shadow-2xl"
+                        />
                       </div>
-                      {/* Sticky Note Image */}
-                      <img 
-                        src="/images/sticky1.svg" 
-                        alt="Tracking Meals Is Time-Consuming" 
-                        className="w-80 h-auto rounded-sm shadow-2xl"
-                      />
-                    </div>
-                  </motion.div>
+                    </motion.div>
 
-                  {/* Note 3 - Tilted right at top (top-left touches Note 2, top-right touches Note 4) */}
-                  <motion.div
-                    className="absolute left-[52%]  scale-75 duration-500 hover:scale-105 transition-transform hover:z-50 group"
-                  >
-                    <div className="relative rotate-[20deg] group-hover:rotate-0 transition-transform duration-300">
-                      {/* Paper Clip Pin */}
-                      <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 z-30">
-                        <svg width="40" height="50" viewBox="0 0 40 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M15 10 Q10 10 10 15 L10 35 Q10 42 17 42 Q24 42 24 35 L24 20 Q24 16 20 16 Q16 16 16 20 L16 32" 
-                                stroke="#6B7280" strokeWidth="3" strokeLinecap="round" fill="none"/>
-                        </svg>
+                    {/* Note 3 - Tilted right at top (top-left touches Note 2, top-right touches Note 4) */}
+                    <motion.div
+                      className="absolute left-[52%]  scale-75 duration-500 hover:scale-105 transition-transform hover:z-50 group"
+                    >
+                      <div className="relative rotate-[20deg] group-hover:rotate-0 transition-transform duration-300">
+                        {/* Paper Clip Pin */}
+                        <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 z-30">
+                          <svg width="40" height="50" viewBox="0 0 40 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M15 10 Q10 10 10 15 L10 35 Q10 42 17 42 Q24 42 24 35 L24 20 Q24 16 20 16 Q16 16 16 20 L16 32" 
+                                  stroke="#6B7280" strokeWidth="3" strokeLinecap="round" fill="none"/>
+                          </svg>
+                        </div>
+                        {/* Sticky Note Image */}
+                        <img 
+                          src="/images/sticky2.svg" 
+                          alt="Calories And Macros Are Confusing" 
+                          className="w-80 h-auto rounded-sm shadow-2xl"
+                        />
                       </div>
-                      {/* Sticky Note Image */}
-                      <img 
-                        src="/images/sticky2.svg" 
-                        alt="Calories And Macros Are Confusing" 
-                        className="w-80 h-auto rounded-sm shadow-2xl"
-                      />
-                    </div>
-                  </motion.div>
+                    </motion.div>
 
-                  {/* Note 4 - Tilted left at top (top-left touches Note 3) */}
-                  <motion.div
-                    className="absolute left-[74%]  scale-75 duration-500 hover:scale-105 transition-transform hover:z-50 group"
-                  >
-                    <div className="relative -rotate-[10deg] group-hover:rotate-0 transition-transform duration-300">
-                      {/* Paper Clip Pin */}
-                      <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 z-30">
-                        <svg width="40" height="50" viewBox="0 0 40 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M15 10 Q10 10 10 15 L10 35 Q10 42 17 42 Q24 42 24 35 L24 20 Q24 16 20 16 Q16 16 16 20 L16 32" 
-                                stroke="#6B7280" strokeWidth="3" strokeLinecap="round" fill="none"/>
-                        </svg>
+                    {/* Note 4 - Tilted left at top (top-left touches Note 3) */}
+                    <motion.div
+                      className="absolute left-[74%]  scale-75 duration-500 hover:scale-125 md:hover:scale-105 transition-transform hover:z-50 group"
+                    >
+                      <div className="relative -rotate-[10deg] group-hover:rotate-0 transition-transform duration-300">
+                        {/* Paper Clip Pin */}
+                        <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 z-30">
+                          <svg width="40" height="50" viewBox="0 0 40 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M15 10 Q10 10 10 15 L10 35 Q10 42 17 42 Q24 42 24 35 L24 20 Q24 16 20 16 Q16 16 16 20 L16 32" 
+                                  stroke="#6B7280" strokeWidth="3" strokeLinecap="round" fill="none"/>
+                          </svg>
+                        </div>
+                        {/* Sticky Note Image */}
+                        <img 
+                          src="/images/sticky3.svg" 
+                          alt="You Don't Know What To Eat For Your Goals" 
+                          className="w-80 h-auto rounded-sm shadow-2xl"
+                        />
                       </div>
-                      {/* Sticky Note Image */}
-                      <img 
-                        src="/images/sticky3.svg" 
-                        alt="You Don't Know What To Eat For Your Goals" 
-                        className="w-80 h-auto rounded-sm shadow-2xl"
-                      />
-                    </div>
-                  </motion.div>
+                    </motion.div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </section>
+            </section>
           </div>
         </div>
 
           {/* Waitlist Form Section - Card 4 */}
-        <section id="waitlist" className="min-h-screen sticky top-10 z-30">
+        <section id="waitlist" className="md:min-h-screen sticky top-10 z-30">
           <div className="w-full h-full rounded-none md:rounded-tl-3xl md:rounded-tr-3xl overflow-y-auto">
             <div className="">
               <img 
@@ -498,7 +502,7 @@ const WaitlistLanding = () => {
 
         {/* Interactive Feature Showcase Section */}
         <motion.section 
-          className="min-h-screen text-gray-900 py-20 relative z-40 transition-colors duration-700"
+          className="min-h-screen px-2 md:px-6  text-gray-900 py-20 relative z-40 transition-colors duration-700"
           animate={{
             backgroundColor: 
               activeFeature === 0 ? '#FEF3F2' : // Light purple/pink
@@ -511,7 +515,7 @@ const WaitlistLanding = () => {
             <div className="grid grid-cols-1 md:grid-cols-5 gap-6 md:gap-12 items-start">
               
               {/* Left Side - Fixed Text & Button (sticky on both mobile and desktop) */}
-              <div className="sticky top-20 md:top-32 z-10 space-y-4 md:space-y-6 md:col-span-2 bg-transparent backdrop-blur-sm md:backdrop-blur-0 py-3 md:py-0 -mx-6 px-6 md:mx-0 md:px-0">
+              <div className="sticky hidden md:block top-20 md:top-32 z-10 space-y-4 md:space-y-6 md:col-span-2 bg-transparent backdrop-blur-sm md:backdrop-blur-0 py-3 md:py-0 -mx-6 px-6 md:mx-0 md:px-0">
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={activeFeature}
@@ -522,16 +526,16 @@ const WaitlistLanding = () => {
                     className="space-y-3 md:space-y-6"
                   >
                     <h2 className="text-2xl md:text-[52px] leading-tight md:leading-[56px] font-regular text-[#101010] max-w-md">
-                      {activeFeature === 0 && "Meal Plans Built For You"}
-                      {activeFeature === 1 && "Scan any meal. Know exactly what's inside."}
-                      {activeFeature === 2 && "Understand what you eat."}
-                      {activeFeature === 3 && "Track progress without the stress."}
+                      {activeFeature === 0 && "Meal plans built for you"}
+                      {activeFeature === 1 && "Scan any meal and know exactly what's inside"}
+                      {activeFeature === 2 && "Understand what you eat"}
+                      {activeFeature === 3 && "Track progress without the stress"}
                     </h2>
                     <p className="max-w-3xl text-[#5C5C5C] text-sm md:text-lg leading-relaxed md:leading-[32px] hidden md:block">
-                      {activeFeature === 0 && "Personalized daily and weekly meal plans based on your body, goals, and preferences."}
-                      {activeFeature === 1 && "Snap a photo and instantly get calories, protein, carbs, fats, and more."}
-                      {activeFeature === 2 && "Break down every meal and learn how it affects your progress."}
-                      {activeFeature === 3 && "A smarter way to plan meals, understand food, and stay consistent—without the guesswork."}
+                      {activeFeature === 0 && "Personalized daily and weekly meal plans based on your body, goals and preferences"}
+                      {activeFeature === 1 && "Snap a photo and instantly get calories, protein, carbs, fats and more"}
+                      {activeFeature === 2 && "Break down every meal and learn how it affects your progress"}
+                      {activeFeature === 3 && "A smarter way to plan meals, understand food and stay consistent without the guesswork"}
                     </p>
                     
                     <motion.button
@@ -548,12 +552,14 @@ const WaitlistLanding = () => {
               </div>
 
               {/* Right Side - Stacking Cards */}
-              <div className="space-y-6 md:space-y-16 md:col-span-3">
+              <div className="space-y-16 md:space-y-16 md:col-span-3">
                 {/* Card 1 */}
                 <FeatureCard 
                   index={0}
                   image='feature1'
                   setActiveFeature={setActiveFeature}
+                  title='Meal plans built for you'
+                  description='Personalized daily and weekly meal plans based on your body, goals and preferences'
                 />
 
                 {/* Card 2 */}
@@ -561,6 +567,8 @@ const WaitlistLanding = () => {
                   index={1}
                   image='feature2'
                   setActiveFeature={setActiveFeature}
+                  title="Scan any meal and know exactly what's inside"
+                  description="Snap a photo and instantly get calories, protein, carbs, fats and more."
                 />
 
                 {/* Card 3 */}
@@ -569,6 +577,8 @@ const WaitlistLanding = () => {
                   image={['feature31', 'feature32']}
                   singleImage={false}
                   setActiveFeature={setActiveFeature}
+                  title='Understand what you eat'
+                  description='Break down every meal and learn how it affects your progress'
                 />
 
                 {/* Card 4 */}
@@ -576,6 +586,8 @@ const WaitlistLanding = () => {
                   index={3}
                   image='feature4'
                   setActiveFeature={setActiveFeature}
+                  title='Track progress without the stress'
+                  description='A smarter way to plan meals, understand food and stay consistent without the guesswork'
                 />
               </div>
 
@@ -593,7 +605,7 @@ const WaitlistLanding = () => {
             >
               
               {/* Weight Gain Card */}
-              <div className="min-w-[85vw] md:min-w-[40vw] flex-shrink-0 h-[85vh]">
+              <div className=" md:min-w-[40vw] flex-shrink-0 md:h-[85vh]">
                   <div className="h-full flex flex-col">
                     <div className="flex-1 flex items-center justify-center p-8">
                       <img 
@@ -602,7 +614,7 @@ const WaitlistLanding = () => {
                         className="w-full h-full object-contain"
                       />
                     </div>
-                    <div className="p-8 bg-gradient-to-t from-gray-50 to-transparent">
+                    <div className="p-8 bg-gradient-to-t from-gray-50 to-transparent hidden md:inline-flex">
                       <h3 className="text-3xl font-bold text-gray-900 mb-3">Weight Gain</h3>
                       <p className="text-gray-600 text-lg mb-4">Build muscle and gain healthy weight with personalized meal plans</p>
                       <button className="bg-black text-white px-6 py-3 rounded-full font-medium">
@@ -613,7 +625,7 @@ const WaitlistLanding = () => {
                 </div>
 
               {/* Weight Loss Card */}
-              <div className="min-w-[85vw] md:min-w-[40vw] flex-shrink-0 h-[85vh]">
+              <div className="md:min-w-[40vw] flex-shrink-0 md:h-[85vh]">
                   <div className="h-full flex flex-col">
                     <div className="flex-1 flex items-center justify-center p-8">
                       <img 
@@ -622,9 +634,9 @@ const WaitlistLanding = () => {
                         className="w-full h-full object-contain"
                       />
                     </div>
-                    <div className="p-8 bg-gradient-to-t from-gray-50 to-transparent">
+                    <div className="p-8 bg-gradient-to-t from-gray-50 to-transparent hidden md:inline-flex">
                       <h3 className="text-3xl font-bold text-gray-900 mb-3">Weight Loss</h3>
-                      <p className="text-gray-600 text-lg mb-4">Lose weight sustainably with AI-powered nutrition tracking</p>
+                      <p className="text-gray-600 text-lg mb-4">Lose weight sustainably with personalized nutrition tracking</p>
                       <button className="bg-black text-white px-6 py-3 rounded-full font-medium">
                         Get Started
                       </button>
@@ -633,7 +645,7 @@ const WaitlistLanding = () => {
                 </div>
 
               {/* Fitness Beginners Card */}
-              <div className="min-w-[85vw] md:min-w-[40vw] flex-shrink-0  h-[85vh]">
+              <div className="md:min-w-[40vw] flex-shrink-0  md:h-[85vh]">
                   <div className="h-full flex flex-col">
                     <div className="flex-1 flex items-center justify-center p-8">
                       <img 
@@ -642,7 +654,7 @@ const WaitlistLanding = () => {
                         className="w-full h-full object-contain"
                       />
                     </div>
-                    <div className="p-8 bg-gradient-to-t from-gray-50 to-transparent">
+                    <div className="p-8 bg-gradient-to-t from-gray-50 to-transparent hidden md:inline-flex">
                       <h3 className="text-3xl font-bold text-gray-900 mb-3">Fitness Beginners</h3>
                       <p className="text-gray-600 text-lg mb-4">Start your fitness journey with guided meal plans and workouts</p>
                       <button className="bg-black text-white px-6 py-3 rounded-full font-medium">
@@ -653,7 +665,7 @@ const WaitlistLanding = () => {
                 </div>
 
               {/* Busy Professionals Card */}
-              <div className="min-w-[85vw] md:min-w-[40vw] flex-shrink-0 bg-white rounded-2xl shadow-lg h-[85vh]">
+              <div className="md:min-w-[40vw] flex-shrink-0 bg-white rounded-2xl shadow-lg md:h-[85vh]">
                   <div className="h-full flex flex-col">
                     <div className="flex-1 flex items-center justify-center p-8">
                       <img 
@@ -662,9 +674,9 @@ const WaitlistLanding = () => {
                         className="w-full h-full object-contain"
                       />
                     </div>
-                    <div className="p-8 bg-gradient-to-t from-gray-50 to-transparent">
+                    <div className="p-8 bg-gradient-to-t from-gray-50 to-transparent hidden md:inline-flex">
                       <h3 className="text-3xl font-bold text-gray-900 mb-3">Busy Professionals</h3>
-                      <p className="text-gray-600 text-lg mb-4">Quick, healthy meals that fit your busy schedule</p>
+                      <p className="text-gray-600 text-lg mb-4">Quick healthy meals that fit your busy schedule</p>
                       <button className="bg-black text-white px-6 py-3 rounded-full font-medium">
                         Get Started
                       </button>
@@ -675,28 +687,28 @@ const WaitlistLanding = () => {
           </div>
         </div>
 
-        <section id="waitlist" className="h-screen relative z-30 bg-gradient-to-b from-white via-white to-dark-900">
+        <section id="waitlist" className="h-screen px-2 md:px-6 relative z-30 bg-gradient-to-b from-white via-white to-dark-900">
           <div className="w-full h-full flex items-center justify-center">
             <div className="relative container mx-auto px-6 py-20">
               <img
                 src='/images/vege.svg'
                 alt="vegetables"
-                className='hidden md:block absolute bottom-0 left-0 w-64 lg:w-auto'
+                className='block absolute bottom-0 left-0 w-40 md:w-64 lg:w-auto'
               />
 
               <img
                 src='/images/vege.svg'
                 alt="vegetables"
-                className='hidden md:block absolute -top-10 right-0 scale-75 w-64 lg:w-auto'
+                className='block absolute bg-blend-lighten md:-top-10 right-0 scale-75 w-36 md:w-64 lg:w-auto'
               />
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="max-w-3xl mx-auto text-[#101010]"
+                className="max-w-3xl mx-auto text-[#101010] relative z-[30]"
               >
-                  <p className='text-center font-normal text-4xl md:text-[72px] leading-tight md:leading-[69px] mb-4'>Join 1,000+ early users getting early access”</p>
-                  <p className='text-center text-[#5C5C5C] font-medium text-base md:text-lg leading-relaxed md:leading-[32px] mx-auto max-w-2xl'>Join the waitlist and be the first to experience AI-powered eating.</p>
+                  <p className='text-center font-normal text-4xl md:text-[72px] leading-tight md:leading-[69px] mb-4'>Join hundreds of early users on the waitlist</p>
+                  <p className='text-center text-[#5C5C5C] font-medium text-base md:text-lg leading-relaxed md:leading-[32px] mx-auto max-w-2xl'>Join the waitlist and be the first to experience a better way to eat</p>
                   <div className='flex justify-center mt-10'>
                     <motion.div 
                       initial={{ opacity: 0, x: 20 }}
@@ -717,17 +729,16 @@ const WaitlistLanding = () => {
         <footer className="top-0 z-50 sticky bg-dark-900">
           <div className="container mx-auto px-6 py-10 md:py-20">
             <div className="flex flex-col md:flex-row items-center justify-between">
-              <div className="flex items-center space-x-2 mb-4 md:mb-0">
-                <div className="w-8 h-8 bg-primary-500 rounded-lg flex items-center justify-center">
-                  <Target className="w-5 h-5 text-white" />
-                </div>
-                <span className="text-xl font-bold">Morpit</span>
+              <div className="flex items-center mb-4 md:mb-0">
+                <img
+                  src='/images/Logo2.svg'
+                  className='w-24 scale-75 md:scale-90'
+                />
+                <div className="text-xl md:text-2xl font-bold">Morfit</div>
               </div>
               
               <div className="flex items-center space-x-6 text-gray-400 text-sm">
-                <span>© 2024 Morpit. All rights reserved.</span>
-                <a href="#" className="hover:text-white transition">Privacy</a>
-                <a href="#" className="hover:text-white transition">Terms</a>
+                <span>© 2026 Morfit. All rights reserved.</span>
               </div>
             </div>
           </div>
@@ -789,7 +800,7 @@ const WaitlistLanding = () => {
                   </motion.div>
                   <h3 className="text-2xl font-semibold text-gray-900 mb-3">You're on the list!</h3>
                   <p className="text-gray-600 mb-6 leading-relaxed">
-                    Thanks for joining. We'll email you as soon as Morpit is ready for early access.
+                    Thanks for joining. We'll email you as soon as Morfit is ready for early access.
                   </p>
                   <button
                     onClick={() => {

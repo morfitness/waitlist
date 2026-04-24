@@ -5,12 +5,12 @@ const nextConfig = {
     domains: ['localhost'],
   },
   env: {
-    APP_NAME: 'Morpit',
-    APP_URL: process.env.APP_URL || 'https://morpit.fit',
+    APP_NAME: 'Morfit',
+    APP_URL: process.env.APP_URL || 'https://morfit.fit',
   },
   experimental: {
     serverActions: {
-      allowedOrigins: ['localhost:3000', 'morpit.fit'],
+      allowedOrigins: ['localhost:3000', 'morfit.fit'],
     },
   },
 }

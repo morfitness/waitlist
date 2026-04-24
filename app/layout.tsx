@@ -2,20 +2,20 @@ import type { Metadata } from 'next'
 import '../styles/globals.css'
 
 export const metadata: Metadata = {
-  title: 'Morpit - AI-Powered Nutrition & Fitness Transformation',
-  description: 'Join the Morpit waitlist for early access to AI-powered nutrition and fitness transformation. Transform your body with intelligent guidance.',
-  keywords: ['morpit', 'nutrition', 'fitness', 'ai', 'transformation', 'waitlist'],
-  authors: [{ name: 'Morpit Team' }],
+  title: 'Morfit - Personalized Nutrition & Fitness Transformation',
+  description: 'Join the Morfit waitlist for early access to personalized nutrition and fitness transformation. Transform your body with intelligent guidance.',
+  keywords: ['morfit', 'nutrition', 'fitness', 'transformation', 'waitlist'],
+  authors: [{ name: 'Morfit Team' }],
   openGraph: {
-    title: 'Morpit - AI-Powered Transformation',
-    description: 'Transform your body with AI-powered nutrition and fitness guidance',
-    url: 'https://morpit.fit',
-    siteName: 'Morpit',
+    title: 'Morfit - Personalized Transformation',
+    description: 'Transform your body with personalized nutrition and fitness guidance',
+    url: 'https://morfit.fit',
+    siteName: 'Morfit',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Morpit - AI-Powered Transformation',
+    title: 'Morfit - Personalized Transformation',
     description: 'Join the waitlist for early access',
   },
 }

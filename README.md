@@ -1,6 +1,6 @@
-# Morpit Waitlist Landing Page
+# Morfit Waitlist Landing Page
 
-A modern, responsive Next.js landing page for the Morpit waitlist with AI-powered nutrition and fitness transformation features.
+A modern, responsive Next.js landing page for the Morfit waitlist with personalized nutrition and fitness transformation features.
 
 ## Features
 
@@ -132,8 +132,8 @@ Update the main content in `pages/index.tsx`:
 Create `.env.local` with your configuration:
 
 ```env
-APP_NAME=Morpit
-APP_URL=https://morpit.fit
+APP_NAME=Morfit
+APP_URL=https://morfit.fit
 ```
 
 ## Deployment
@@ -207,4 +207,4 @@ MIT License - see LICENSE file for details.
 
 ---
 
-Built with Next.js, TypeScript, and Tailwind CSS for Morpit.
+Built with Next.js, TypeScript, and Tailwind CSS for Morfit.
