@@ -12,13 +12,13 @@ interface WaitlistEntry {
 // Simple in-memory storage (in production, use a database)
 let waitlist: WaitlistEntry[] = []
 
-export async function joinWaitlist(name: string, email: string) {
+export async function joinWaitlist(email: string) {
   try {
     // Validate input
-    if (!name || !email) {
+    if (!email) {
       return {
         success: false,
-        error: 'Name and email are required'
+        error: 'Email is required'
       }
     }
 
@@ -42,7 +42,7 @@ export async function joinWaitlist(name: string, email: string) {
     // Create new entry
     const newEntry: WaitlistEntry = {
       id: Date.now().toString(),
-      name: name.trim(),
+      name: '',
       email: email.toLowerCase().trim(),
       timestamp: new Date().toISOString()
     }

@@ -5,6 +5,7 @@ import { motion, AnimatePresence, useInView, useScroll, useTransform } from 'fra
 import { ChevronRight, Mail, Users, Target, Zap, CheckCircle, ArrowRight, Menu, X, LucideMoveRight } from 'lucide-react'
 import { clsx } from 'clsx'
 import { joinWaitlist } from './actions/waitlist'
+import Script from 'next/script'
 
 // Feature Card Component with scroll detection
 const FeatureCard = ({ index,  image, singleImage = true, title, description, setActiveFeature }: {
@@ -218,12 +219,11 @@ const WaitlistLanding = () => {
     setError('')
 
     try {
-      const result = await joinWaitlist(name, email)
+      const result = await joinWaitlist(email)
       
       if (result.success) {
         setIsSubmitted(true)
         setEmail('')
-        setName('')
       } else {
         setError(result.error || 'Something went wrong. Please try again.')
       }
@@ -789,6 +789,7 @@ const WaitlistLanding = () => {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   className="p-10 text-center"
+                  id="success-message"
                 >
                   <motion.div
                     initial={{ scale: 0 }}
@@ -860,12 +861,11 @@ const WaitlistLanding = () => {
                       Join <span className="font-semibold text-[#101010]">1,247+</span> people already on the list for AI‑powered meal plans and instant food analysis.
                     </p>
 
-                    <form onSubmit={handleSubmit} className="relative max-w-md">
+                    <form className="relative max-w-md" onSubmit={handleSubmit}>
                       {/* Inline pill input with submit inside */}
                       <div className="relative flex items-center bg-white border border-[#E8E0D4] rounded-full p-1.5 shadow-sm focus-within:border-black transition">
                         <Mail className="w-4 h-4 text-[#5C5C5C] ml-4 flex-shrink-0" />
                         <input
-                          id="modal-email"
                           type="email"
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
@@ -897,16 +897,6 @@ const WaitlistLanding = () => {
                         </motion.button>
                       </div>
 
-                      {error && (
-                        <motion.p
-                          initial={{ opacity: 0, y: -5 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          className="text-sm text-red-600 mt-3 px-2"
-                        >
-                          {error}
-                        </motion.p>
-                      )}
-
                       {/* Social proof avatars */}
                       <div className="flex items-center gap-3 mt-6">
                         <div className="flex -space-x-2">
@@ -930,6 +920,31 @@ const WaitlistLanding = () => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      <Script>
+        {`window.REQUIRED_CODE_ERROR_MESSAGE = 'Please provide a valid email address';
+          window.LOCALE = 'en';
+          window.EMAIL_INVALID_MESSAGE = window.SMS_INVALID_MESSAGE = "Hmm, that doesn't look right. Can you double-check it?";
+
+          window.REQUIRED_ERROR_MESSAGE = "This field is required";
+
+          window.GENERIC_INVALID_MESSAGE = "Hmm, that doesn't look right. Can you double-check it?";
+
+
+
+
+          window.translation = {
+            common: {
+              selectedList: '{quantity} list selected',
+              selectedLists: '{quantity} lists selected',
+              selectedOption: '{quantity} selected',
+              selectedOptions: '{quantity} selected',
+            }
+          };
+
+          var AUTOHIDE = Boolean(0);
+      `}
+      </Script>
     </main>
   )
 }
