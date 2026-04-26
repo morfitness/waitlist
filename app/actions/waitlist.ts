@@ -1,86 +1,49 @@
 'use server'
 
-import { revalidatePath } from 'next/cache'
-
-interface WaitlistEntry {
-  name: string
-  email: string
-  timestamp: string
-  id: string
-}
-
-// Simple in-memory storage (in production, use a database)
-let waitlist: WaitlistEntry[] = []
+const BREVO_FORM_URL =
+  process.env.BREVO_FORM_URL ||
+  'https://5ddd9a6f.sibforms.com/serve/MUIFAFaX14JAv31fbUUCPJqjowOcfhnObySSii2OnP4DKmFjQ6obUlJlwmByxOQksYsFYH2lUpQxTK8ZMH-oKFzRkDDsoE8mhfWgSDbcMmza-zpqX1Bp8P7ngPoeEfqW2ipeCzZ_Y1yV-O1nfKh-0hhTmbLey97Pz2zmvbXmh4zt7z0rA6uyjnnkvg44_7R9Ix-dTPe2dsbbaI-1kA=='
 
 export async function joinWaitlist(email: string) {
   try {
-    // Validate input
     if (!email) {
-      return {
-        success: false,
-        error: 'Email is required'
-      }
+      return { success: false, error: 'Email is required' }
     }
 
-    // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(email)) {
-      return {
-        success: false,
-        error: 'Invalid email format'
-      }
+      return { success: false, error: 'Invalid email format' }
     }
 
-    // Check if email already exists
-    if (waitlist.find(entry => entry.email === email.toLowerCase())) {
-      return {
-        success: false,
-        error: 'Email already registered'
-      }
+    // Submit to Brevo
+    const formData = new URLSearchParams()
+    formData.append('EMAIL', email.toLowerCase().trim())
+    formData.append('email_address_check', '')
+    formData.append('locale', 'en')
+
+    const response = await fetch(BREVO_FORM_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Accept': 'application/json, text/plain, */*',
+      },
+      body: formData.toString(),
+      redirect: 'manual',
+    })
+
+    // Brevo typically returns 200 or a 3xx redirect on success
+    if (response.status >= 200 && response.status < 400) {
+      return { success: true, message: 'Successfully joined waitlist' }
     }
 
-    // Create new entry
-    const newEntry: WaitlistEntry = {
-      id: Date.now().toString(),
-      name: '',
-      email: email.toLowerCase().trim(),
-      timestamp: new Date().toISOString()
-    }
-
-    // Add to waitlist
-    waitlist.push(newEntry)
-
-    // Log the entry (in production, save to database)
-    console.log('New waitlist entry:', newEntry)
-
-    // Revalidate the page to show updated count
-    revalidatePath('/')
-
-    return {
-      success: true,
-      message: 'Successfully joined waitlist',
-      entry: {
-        name: newEntry.name,
-        email: newEntry.email,
-        timestamp: newEntry.timestamp
-      }
-    }
-
-  } catch (error) {
-    console.error('Waitlist action error:', error)
+    const text = await response.text().catch(() => '')
+    console.error('Brevo submission failed:', response.status, text)
     return {
       success: false,
-      error: 'Internal server error'
+      error: 'Could not add you to the waitlist. Please try again.',
     }
+  } catch (error) {
+    console.error('Waitlist action error:', error)
+    return { success: false, error: 'Network error. Please try again.' }
   }
-}
-
-// Helper function to get waitlist entries (for admin use)
-export async function getWaitlistEntries(): Promise<WaitlistEntry[]> {
-  return waitlist
-}
-
-// Helper function to get waitlist count
-export async function getWaitlistCount(): Promise<number> {
-  return waitlist.length
 }
