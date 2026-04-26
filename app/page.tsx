@@ -103,11 +103,24 @@ const WaitlistLanding = () => {
         setMaxScroll(-(scrollWidth - viewportWidth))
       }
     }
-    
+
     calculateMaxScroll()
+    // Recalculate after a tick to catch post-layout sizing (images, fonts)
+    const t = setTimeout(calculateMaxScroll, 300)
     window.addEventListener('resize', calculateMaxScroll)
-    
-    return () => window.removeEventListener('resize', calculateMaxScroll)
+
+    // Observe size changes of the cards container
+    let ro: ResizeObserver | null = null
+    if (cardsRef.current && typeof ResizeObserver !== 'undefined') {
+      ro = new ResizeObserver(calculateMaxScroll)
+      ro.observe(cardsRef.current)
+    }
+
+    return () => {
+      clearTimeout(t)
+      window.removeEventListener('resize', calculateMaxScroll)
+      ro?.disconnect()
+    }
   }, [])
   
   // Transform scroll progress to horizontal movement using actual dimensions
@@ -596,93 +609,48 @@ const WaitlistLanding = () => {
         </motion.section>
         
         {/* Horizontal Parallax Scroll Section */}
-        <div ref={horizontalRef} className='h-[300vh] md:h-[500vh] bg-white relative z-50'>
-          <div className="sticky top-0 h-screen overflow-hidden flex items-center">
+        <div ref={horizontalRef} className='h-[150vh] md:h-[500vh] bg-white relative z-50'>
+          <div className="sticky top-0 h-screen overflow-hidden flex items-end md:items-center pb-8 md:pb-0">
             <motion.div 
               ref={cardsRef}
               style={{ x }}
-              className="flex gap-8 px-6 py-8"
+              className="flex gap-2 md:gap-4 pl-4 md:pl-6"
             >
-              
               {/* Weight Gain Card */}
-              <div className=" md:min-w-[40vw] flex-shrink-0 md:h-[85vh]">
-                  <div className="h-full flex flex-col">
-                    <div className="flex-1 flex items-center justify-center p-8">
-                      <img 
-                        src="/images/weight1.svg" 
-                        alt="Weight Gain"
-                        className="w-full h-full object-contain"
-                      />
-                    </div>
-                    <div className="p-8 bg-gradient-to-t from-gray-50 to-transparent hidden md:inline-flex">
-                      <h3 className="text-3xl font-bold text-gray-900 mb-3">Weight Gain</h3>
-                      <p className="text-gray-600 text-lg mb-4">Build muscle and gain healthy weight with personalized meal plans</p>
-                      <button className="bg-black text-white px-6 py-3 rounded-full font-medium">
-                        Get Started
-                      </button>
-                    </div>
-                  </div>
-                </div>
+              <div className="min-w-[85vw] h-[65vh] md:min-w-[40vw] md:h-[85vh] flex-shrink-0 flex items-center justify-center min-h-0">
+                <img 
+                  src="/images/weight1.svg" 
+                  alt="Weight Gain"
+                  className="w-full h-full object-contain"
+                />
+              </div>
 
               {/* Weight Loss Card */}
-              <div className="md:min-w-[40vw] flex-shrink-0 md:h-[85vh]">
-                  <div className="h-full flex flex-col">
-                    <div className="flex-1 flex items-center justify-center p-8">
-                      <img 
-                        src="/images/weight2.svg" 
-                        alt="Weight Loss"
-                        className="w-full h-full object-contain"
-                      />
-                    </div>
-                    <div className="p-8 bg-gradient-to-t from-gray-50 to-transparent hidden md:inline-flex">
-                      <h3 className="text-3xl font-bold text-gray-900 mb-3">Weight Loss</h3>
-                      <p className="text-gray-600 text-lg mb-4">Lose weight sustainably with personalized nutrition tracking</p>
-                      <button className="bg-black text-white px-6 py-3 rounded-full font-medium">
-                        Get Started
-                      </button>
-                    </div>
-                  </div>
-                </div>
+              <div className="min-w-[85vw] h-[65vh] md:min-w-[40vw] md:h-[85vh] flex-shrink-0 flex items-center justify-center min-h-0">
+                <img 
+                  src="/images/weight2.svg" 
+                  alt="Weight Loss"
+                  className="w-full h-full object-contain"
+                />
+              </div>
 
               {/* Fitness Beginners Card */}
-              <div className="md:min-w-[40vw] flex-shrink-0  md:h-[85vh]">
-                  <div className="h-full flex flex-col">
-                    <div className="flex-1 flex items-center justify-center p-8">
-                      <img 
-                        src="/images/weight3.svg" 
-                        alt="Fitness Beginners"
-                        className="w-full h-full object-contain"
-                      />
-                    </div>
-                    <div className="p-8 bg-gradient-to-t from-gray-50 to-transparent hidden md:inline-flex">
-                      <h3 className="text-3xl font-bold text-gray-900 mb-3">Fitness Beginners</h3>
-                      <p className="text-gray-600 text-lg mb-4">Start your fitness journey with guided meal plans and workouts</p>
-                      <button className="bg-black text-white px-6 py-3 rounded-full font-medium">
-                        Get Started
-                      </button>
-                    </div>
-                  </div>
-                </div>
+              <div className="min-w-[85vw] h-[65vh] md:min-w-[40vw] md:h-[85vh] flex-shrink-0 flex items-center justify-center min-h-0">
+                <img 
+                  src="/images/weight3.svg" 
+                  alt="Fitness Beginners"
+                  className="w-full h-full object-contain"
+                />
+              </div>
 
               {/* Busy Professionals Card */}
-              <div className="md:min-w-[40vw] flex-shrink-0 bg-white rounded-2xl shadow-lg md:h-[85vh]">
-                  <div className="h-full flex flex-col">
-                    <div className="flex-1 flex items-center justify-center p-8">
-                      <img 
-                        src="/images/weight4.svg" 
-                        alt="Busy Professionals"
-                        className="w-full h-full object-contain"
-                      />
-                    </div>
-                    <div className="p-8 bg-gradient-to-t from-gray-50 to-transparent hidden md:inline-flex">
-                      <h3 className="text-3xl font-bold text-gray-900 mb-3">Busy Professionals</h3>
-                      <p className="text-gray-600 text-lg mb-4">Quick healthy meals that fit your busy schedule</p>
-                      <button className="bg-black text-white px-6 py-3 rounded-full font-medium">
-                        Get Started
-                      </button>
-                    </div>
-                  </div>
-                </div>
+              <div className="min-w-[85vw] h-[65vh] md:min-w-[40vw] md:h-[85vh] flex-shrink-0 flex items-center justify-center min-h-0">
+                <img 
+                  src="/images/weight4.svg" 
+                  alt="Busy Professionals"
+                  className="w-full h-full object-contain"
+                />
+              </div>
             </motion.div>
           </div>
         </div>
